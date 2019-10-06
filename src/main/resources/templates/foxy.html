@@ -9,44 +9,134 @@
 <!-- start the body of your page -->
 <body style='margin: 0px; overflow: hidden;'>
 	<!-- Define your scene -->
-	<a-scene embedded arjs='trackingMethod: best;' antialias='true'>
+	<a-scene embedded arjs='sourceType: webcam; detectionMode: mono_and_matrix; matrixCodeType: 3x3; debugUIEnabled: false; vr-mode-ui="enabled: false' antialias='true'>
 		<a-assets> 
 			<a-asset-item id='tree-obj' src='models/little-fox/model.obj'></a-asset-item> 
 			<a-asset-item id='tree-mtl' src='models/little-fox/materials.mtl'></a-asset-item> 
 		</a-assets> 
-	
-		<a-anchor hit-testing-enabled='true'> 
-			<a-entity id="logo" rotation="0 45 0" scale='0.4 0.4 0.4'> 
+
+		<!-- <a-anchor hit-testing-enabled='true'> -->
+			<a-marker preset='hiro' id='marker-hiro' registerevents>
+		
+			<a-entity move-my-model id="logo" rotation="0 45 0" scale='0.4 0.4 0.4'> 
 				<a-entity obj-model='obj: #tree-obj; mtl: #tree-mtl' position='0 0.8 0'
 					rotation='0 90 0' shadow='receive: true'></a-entity>
-				<a-entity position='-0.4 1.5 0' scale='0.6 0.6 0.6'> 
-					<a-text
-					position='-1 0 0' side='double' value='Hooooola!!!' color='black'
-					shadow='receive: true'></a-text> 
-				</a-entity> 
-				<a-text position="-1 1.5 -3" value="Hello, World 001 opacity" color="black" width="5" opacity="0.3"></a-text>
-				<a-text position="-1 1 -3" value="Hello, World 001 small" color="black"
-					width="3"></a-text> 
-				<a-text position="-1 0.5 -3"
-					value="Hello, World 001" color="black" width="5"></a-text> 
-				<a-text position="-4 1 -3" value="Hello, World 002 small" color="black"
-					font="dejavu" scale="0.5 0.5 0.5"></a-text> 
-				<a-text position="-4 0.5 -3" value="Hello, World 002" color="black"
-					font="dejavu"></a-text> 
-				<a-text position="3 1.6 -5" value="Hello, World 003 small" color="black" font="kelsonsans"></a-text>
-				<a-text position="2 0.5 -3" value="Hello, World 003" color="black"
-					font="kelsonsans"></a-text> 
-				<a-entity position="0 3.5 -4" geometry="primitive: plane; width: 5" material="color: #EF2D5E"
-					text="color: white; align: center; font: dejavu;
-			              value: Hello, World 005\nHello, World 005;">
-				</a-entity> 
-				<!-- <a-entity position="0 -1 -4" geometry="primitive: plane; width: 1; height: 0.2" material="color: #fff"
+				<a-entity id="text-globe" position='-0.6 1.5 0' scale='0.8 0.8 0.8' geometry="primitive: plane; width: 2; height: 0.2" material="color: #fff"
 					text="color: black; align: center; font: dejavu;
-			              value: Hello, World 006;"> -->
+			              value: Hello, World 006;"> 
+				</a-entity> 
+				<a-text id="text_h0" visible="false" position="-1 1.9 -3" value="Hello, World 001 opacity" color="black" width="5" opacity="0.3"></a-text>
+				<a-text id="text_h1" visible="false" position="-1 1 -3" value="Hello, World 001 small" color="black"
+					width="3"></a-text> 
+				<a-text id="text_h2" visible="false" position="-1 0.5 -3"
+					value="Hello, World 001" color="black" width="5"></a-text> 
+				<a-text id="text_h3" visible="false" position="-3.5 1 -3" value="Hello, World 002 small" color="black"
+					font="dejavu" scale="0.5 0.5 0.5"></a-text> 
+				<a-text id="text_h4" visible="false" position="-3.5 0.5 -3" value="Hello, World 002" color="black"
+					font="dejavu"></a-text> 
+				<a-text id="text_h5" visible="false" position="3 1.6 -5" value="Hello, World 003 small" color="black" font="kelsonsans"></a-text>
+				<a-text id="text_h6" visible="false" position="2 0.5 -3" value="Hello, World 003" color="black"
+					font="kelsonsans"></a-text> 
 				</a-entity> 
 			<a-entity>
-		</a-anchor> 
-		
+				</a-marker>
+		<!-- </a-anchor> --> 
 		<a-entity camera></a-entity>
+		
 	</a-scene>
+	<script type="text/javascript">
+		String.prototype.format = function() {
+		    var formatted = this;
+		    for( var arg in arguments ) {
+		        formatted = formatted.replace("{" + arg + "}", arguments[arg]);
+		    }
+		    return formatted;
+		};
+		
+		var text = ["Ps... ps...", "Acercate", "Acercate mas", "¡No tanto!", "Asi esta bien"];
+		var format = "color: black; align: center; font: dejavu; value: {0};";
+
+		function sleep(milliseconds) {
+			  var start = new Date().getTime();
+			  for (var i = 0; i < 1e7; i++) {
+			    if ((new Date().getTime() - start) > milliseconds){
+			      break;
+			    }
+			  }
+			}
+
+		
+		AFRAME.registerComponent('registerevents', {
+			init: function () {
+				var marker = this.el;
+				marker.addEventListener('markerFound', function() {
+					var markerId = marker.id;
+					console.log('markerFound', markerId);
+				});
+				marker.addEventListener('markerLost', function() {
+					var markerId = marker.id;
+					console.log('markerLost', markerId);
+				});
+			}
+		});
+		
+		/*AFRAME.registerComponent('move-my-model', {
+		    schema: {
+		        func: {
+		            default: ""
+		        }
+		    },
+			  init: function () {
+				   
+				  console.log("init " + this.oldVisible);
+					text.forEach(function (elemento, indice, array) {
+				    setTimeout( () => {
+				     	console.log(elemento + " " + indice);
+						var el = document.querySelector("#text-globe");
+						el.setAttribute("text",format.format(elemento));
+						if(indice == 3){
+							var elText0 = document.querySelector("#text_h0");
+							elText0.setAttribute("visible", true);
+							var elText1 = document.querySelector("#text_h1");
+							elText1.setAttribute("visible", true);
+							var elText2 = document.querySelector("#text_h2");
+							elText2.setAttribute("visible", true);
+							var elText3 = document.querySelector("#text_h3");
+							elText3.setAttribute("visible", true);
+							var elText4 = document.querySelector("#text_h4");
+							elText4.setAttribute("visible", true);
+							var elText5 = document.querySelector("#text_h5");
+							elText5.setAttribute("visible", true);
+							var elText6 = document.querySelector("#text_h6");
+							elText6.setAttribute("visible", true);
+						}
+						if(indice == 4){
+							var elText0 = document.querySelector("#text_h0");
+							elText0.setAttribute("visible", false);
+							var elText1 = document.querySelector("#text_h1");
+							elText1.setAttribute("visible", false);
+							var elText2 = document.querySelector("#text_h2");
+							elText2.setAttribute("visible", false);
+							var elText3 = document.querySelector("#text_h3");
+							elText3.setAttribute("visible", false);
+							var elText4 = document.querySelector("#text_h4");
+							elText4.setAttribute("visible", false);
+							var elText5 = document.querySelector("#text_h5");
+							elText5.setAttribute("visible", false);
+							var elText6 = document.querySelector("#text_h6");
+							elText6.setAttribute("visible", false);
+						}
+						sleep(3000);
+				    }, 3000)
+				});
+			  },
+			  update: function () {
+			  },
+			  tick: function (time, timeDelta) {
+
+			  },
+			  play: function () {
+			  }
+			})*/
+	</script>
 </body>

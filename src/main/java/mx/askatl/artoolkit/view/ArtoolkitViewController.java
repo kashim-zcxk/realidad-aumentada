@@ -16,5 +16,11 @@ public class ArtoolkitViewController {
 	  public String foxy(Model modelo) {
 	    return "foxy";
 	  }
+	  
+	  
+	  @RequestMapping("/minecraft")
+	  public String minecraft(Model modelo) {
+	    return "minecraft";
+	  }
 }
  
