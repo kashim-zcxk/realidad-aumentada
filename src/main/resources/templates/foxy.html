@@ -5,11 +5,13 @@
 <script>ARjs.Context.baseURL = '/'</script>
 <!-- include shadowonly-plane -->
 <script src='js/aframe-shadow-plane.js'></script>
-
+<head>
+  <meta charset="utf-8">
+</head>
 <!-- start the body of your page -->
 <body style='margin: 0px; overflow: hidden;'>
 	<!-- Define your scene -->
-	<a-scene embedded arjs='sourceType: webcam; detectionMode: mono_and_matrix; matrixCodeType: 3x3; debugUIEnabled: false; vr-mode-ui="enabled: false' antialias='true'>
+	<a-scene embedded arjs='sourceType: webcam; detectionMode: mono_and_matrix; matrixCodeType: 3x3; debugUIEnabled: false; vr-mode-ui="enabled: false'>
 		<a-assets> 
 			<a-asset-item id='tree-obj' src='models/little-fox/model.obj'></a-asset-item> 
 			<a-asset-item id='tree-mtl' src='models/little-fox/materials.mtl'></a-asset-item> 
@@ -21,7 +23,7 @@
 			<a-entity move-my-model id="logo" rotation="0 45 0" scale='0.4 0.4 0.4'> 
 				<a-entity obj-model='obj: #tree-obj; mtl: #tree-mtl' position='0 0.8 0'
 					rotation='0 90 0' shadow='receive: true'></a-entity>
-				<a-entity id="text-globe" visible="false" position='-0.6 1.5 0' scale='0.8 0.8 0.8' geometry="primitive: plane; width: 2; height: 0.2" material="color: #fff"
+				<a-entity id="text-globe" visible="false" position='-0.6 1.5 0' scale='0.8 0.8 0.8' geometry="primitive: plane; width: 2; height: 0.4" material="color: #fff"
 					text="color: black; align: center; font: dejavu;
 			              value: hola;"> 
 				</a-entity> 
@@ -29,13 +31,13 @@
 				<a-text id="text_h1" visible="false" position="-1 1 -3" value="Konnichi wa" color="black"
 					width="3"></a-text> 
 				<a-text id="text_h2" visible="false" position="-1 0.5 -3"
-					value="привет" color="black" width="5"></a-text> 
-				<a-text id="text_h3" visible="false" position="-3.5 1 -3" value="Hej" color="black"
+					value="Moin Moin" color="black" width="5"></a-text> 
+				<a-text id="text_h3" visible="false" position="-2.5 1 -3" value="Hej" color="black"
 					font="dejavu" scale="0.5 0.5 0.5"></a-text> 
-				<a-text id="text_h4" visible="false" position="-3.5 0.5 -3" value="Hallo" color="black"
+				<a-text id="text_h4" visible="false" position="2.5 1.4 -3" value="Hallo" color="black"
 					font="dejavu"></a-text> 
 				<a-text id="text_h5" visible="false" position="3 1.6 -5" value="Hello" color="black" font="kelsonsans"></a-text>
-				<a-text id="text_h6" visible="false" position="2 0.5 -3" value="Cześć" color="black"
+				<a-text id="text_h6" visible="false" position="2 0.5 -3" value="Zdravstvuyte" color="black"
 					font="kelsonsans"></a-text> 
 				</a-entity> 
 			<a-entity>
@@ -43,7 +45,7 @@
 		<!-- </a-anchor> --> 
 		<a-entity camera></a-entity>
 	</a-scene>
-	<script type="text/javascript">
+	<script type="text/javascript" charset="utf-8">
 		String.prototype.format = function() {
 		    var formatted = this;
 		    for( var arg in arguments ) {
@@ -52,7 +54,7 @@
 		    return formatted;
 		};
 		
-		var text = ["Ps... ps...", "Acercate", "Acercate mas", "¡No tanto!", "Asi esta bien"];
+		var text = ["Ps... ps...", "Acercate", "Quiero decirte algo", "Hooooola \u0040luigicantu" , "\u00BFQuieres escuchar un chiste?", "\u00BFQue le dijo el dos al cero?", "Veinte conmigo", "jajaja", "Adios.."];
 		var format = "color: black; align: center; font: dejavu; value: {0};";
 
 		function sleep(milliseconds) {
@@ -63,55 +65,67 @@
 			    }
 			  }
 			}
-
+		
+		const delay = (ms) => {
+			  const startPoint = new Date().getTime()
+			  while (new Date().getTime() - startPoint <= ms) {/* wait */}
+			}
+		
 		
 		AFRAME.registerComponent('registerevents', {
 			init: function () {
 				var marker = this.el;
 				marker.addEventListener('markerFound', function() {
+					var timeConst = 3000;
+					var timeFactor = 1;
+					var el = document.querySelector("#text-globe");
+					el.setAttribute("visible",false);
+					el.setAttribute("text","");
 					var markerId = marker.id;
 					console.log('markerFound', markerId);
-					text.forEach(function (elemento, indice, array) {
-					    setTimeout( () => {
-					     	console.log(elemento + " " + indice);
-							var el = document.querySelector("#text-globe");
-							el.setAttribute("text",format.format(elemento));
-							el.setAttribute("visible",true);
-							if(indice == 3){
-								var elText0 = document.querySelector("#text_h0");
-								elText0.setAttribute("visible", true);
-								var elText1 = document.querySelector("#text_h1");
-								elText1.setAttribute("visible", true);
-								var elText2 = document.querySelector("#text_h2");
-								elText2.setAttribute("visible", true);
-								var elText3 = document.querySelector("#text_h3");
-								elText3.setAttribute("visible", true);
-								var elText4 = document.querySelector("#text_h4");
-								elText4.setAttribute("visible", true);
-								var elText5 = document.querySelector("#text_h5");
-								elText5.setAttribute("visible", true);
-								var elText6 = document.querySelector("#text_h6");
-								elText6.setAttribute("visible", true);
-							}
-							if(indice == 4){
-								var elText0 = document.querySelector("#text_h0");
-								elText0.setAttribute("visible", false);
-								var elText1 = document.querySelector("#text_h1");
-								elText1.setAttribute("visible", false);
-								var elText2 = document.querySelector("#text_h2");
-								elText2.setAttribute("visible", false);
-								var elText3 = document.querySelector("#text_h3");
-								elText3.setAttribute("visible", false);
-								var elText4 = document.querySelector("#text_h4");
-								elText4.setAttribute("visible", false);
-								var elText5 = document.querySelector("#text_h5");
-								elText5.setAttribute("visible", false);
-								var elText6 = document.querySelector("#text_h6");
-								elText6.setAttribute("visible", false);
-							}
-							sleep(3000);
-					    }, 3000)
-					});
+					sleep(4000);
+					var el = document.querySelector("#text-globe");
+					setTimeout(function(){ el.setAttribute("text",format.format(text[0])); el.setAttribute("visible",true);}, timeConst * (timeFactor++));
+					setTimeout(function(){ el.setAttribute("text",format.format(text[1])); }, timeConst * (timeFactor++));
+					setTimeout(function(){ el.setAttribute("text",format.format(text[2])); }, timeConst * (timeFactor++));
+					setTimeout(function(){ el.setAttribute("text",format.format(text[3])); 
+						var elText0 = document.querySelector("#text_h0");
+						elText0.setAttribute("visible", true);
+						var elText1 = document.querySelector("#text_h1");
+						elText1.setAttribute("visible", true);
+						var elText2 = document.querySelector("#text_h2");
+						elText2.setAttribute("visible", true);
+						var elText3 = document.querySelector("#text_h3");
+						elText3.setAttribute("visible", true);
+						var elText4 = document.querySelector("#text_h4");
+						elText4.setAttribute("visible", true);
+						var elText5 = document.querySelector("#text_h5");
+						elText5.setAttribute("visible", true);
+						var elText6 = document.querySelector("#text_h6");
+						elText6.setAttribute("visible", true);
+					}, timeConst * (timeFactor++));
+					setTimeout(function(){ el.setAttribute("text",format.format(text[4])); 
+						var elText0 = document.querySelector("#text_h0");
+						elText0.setAttribute("visible", false);
+						var elText1 = document.querySelector("#text_h1");
+						elText1.setAttribute("visible", false);
+						var elText2 = document.querySelector("#text_h2");
+						elText2.setAttribute("visible", false);
+						var elText3 = document.querySelector("#text_h3");
+						elText3.setAttribute("visible", false);
+						var elText4 = document.querySelector("#text_h4");
+						elText4.setAttribute("visible", false);
+						var elText5 = document.querySelector("#text_h5");
+						elText5.setAttribute("visible", false);
+						var elText6 = document.querySelector("#text_h6");
+						elText6.setAttribute("visible", false);
+					}, timeConst * (timeFactor++));
+					setTimeout(function(){ el.setAttribute("text",format.format(text[5])); }, timeConst * (timeFactor++));
+					setTimeout(function(){ el.setAttribute("text",format.format(text[6])); }, timeConst * (timeFactor++));
+					setTimeout(function(){ el.setAttribute("text",format.format(text[7])); }, timeConst * (timeFactor++));
+					setTimeout(function(){ el.setAttribute("text",format.format(text[8])); }, timeConst * (timeFactor++));
+					setTimeout(function(){ el.setAttribute("visible",false); }, timeConst * (timeFactor++));
+					
 				});
 				marker.addEventListener('markerLost', function() {
 					var markerId = marker.id;
