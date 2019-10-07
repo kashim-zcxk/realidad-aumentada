@@ -54,7 +54,7 @@
 		    return formatted;
 		};
 		
-		var text = ["Ps... ps...", "Acercate", "Quiero decirte algo", "Hooooola \u0040luigicantu" , "\u00BFQuieres escuchar un chiste?", "\u00BFQue le dijo el dos al cero?", "Veinte conmigo", "jajaja", "Adios.."];
+		var text = ["Ps... ps...", "Acercate", "Quiero decirte algo", "Hooooola \u0040luigicantu" , "\u00BFQuieres escuchar un chiste?", "\u00BFQue le dijo el dos al cero?", "Veinte conmigo", "jajaja", "Adios..", "Adios.."];
 		var format = "color: black; align: center; font: dejavu; value: {0};";
 
 		function sleep(milliseconds) {
@@ -71,10 +71,16 @@
 			  while (new Date().getTime() - startPoint <= ms) {/* wait */}
 			}
 		
+		var timeouts = [];
 		
 		AFRAME.registerComponent('registerevents', {
 			init: function () {
 				var marker = this.el;
+				console.log("timeouts: " + timeouts.length);
+				for (var i=0; i<timeouts.length; i++) {
+						 clearTimeout(timeouts[i]);
+				}	
+
 				marker.addEventListener('markerFound', function() {
 					var timeConst = 3000;
 					var timeFactor = 1;
@@ -83,53 +89,55 @@
 					el.setAttribute("text","");
 					var markerId = marker.id;
 					console.log('markerFound', markerId);
-					sleep(4000);
+			
 					var el = document.querySelector("#text-globe");
-					setTimeout(function(){ el.setAttribute("text",format.format(text[0])); el.setAttribute("visible",true);}, timeConst * (timeFactor++));
-					setTimeout(function(){ el.setAttribute("text",format.format(text[1])); }, timeConst * (timeFactor++));
-					setTimeout(function(){ el.setAttribute("text",format.format(text[2])); }, timeConst * (timeFactor++));
-					setTimeout(function(){ el.setAttribute("text",format.format(text[3])); 
-						var elText0 = document.querySelector("#text_h0");
-						elText0.setAttribute("visible", true);
-						var elText1 = document.querySelector("#text_h1");
-						elText1.setAttribute("visible", true);
-						var elText2 = document.querySelector("#text_h2");
-						elText2.setAttribute("visible", true);
-						var elText3 = document.querySelector("#text_h3");
-						elText3.setAttribute("visible", true);
-						var elText4 = document.querySelector("#text_h4");
-						elText4.setAttribute("visible", true);
-						var elText5 = document.querySelector("#text_h5");
-						elText5.setAttribute("visible", true);
-						var elText6 = document.querySelector("#text_h6");
-						elText6.setAttribute("visible", true);
-					}, timeConst * (timeFactor++));
-					setTimeout(function(){ el.setAttribute("text",format.format(text[4])); 
-						var elText0 = document.querySelector("#text_h0");
-						elText0.setAttribute("visible", false);
-						var elText1 = document.querySelector("#text_h1");
-						elText1.setAttribute("visible", false);
-						var elText2 = document.querySelector("#text_h2");
-						elText2.setAttribute("visible", false);
-						var elText3 = document.querySelector("#text_h3");
-						elText3.setAttribute("visible", false);
-						var elText4 = document.querySelector("#text_h4");
-						elText4.setAttribute("visible", false);
-						var elText5 = document.querySelector("#text_h5");
-						elText5.setAttribute("visible", false);
-						var elText6 = document.querySelector("#text_h6");
-						elText6.setAttribute("visible", false);
-					}, timeConst * (timeFactor++));
-					setTimeout(function(){ el.setAttribute("text",format.format(text[5])); }, timeConst * (timeFactor++));
-					setTimeout(function(){ el.setAttribute("text",format.format(text[6])); }, timeConst * (timeFactor++));
-					setTimeout(function(){ el.setAttribute("text",format.format(text[7])); }, timeConst * (timeFactor++));
-					setTimeout(function(){ el.setAttribute("text",format.format(text[8])); }, timeConst * (timeFactor++));
-					setTimeout(function(){ el.setAttribute("visible",false); }, timeConst * (timeFactor++));
+					var elText0 = document.querySelector("#text_h0"); elText0.setAttribute("visible", false);
+					var elText1 = document.querySelector("#text_h1"); elText1.setAttribute("visible", false);
+					var elText2 = document.querySelector("#text_h2"); elText2.setAttribute("visible", false);
+					var elText3 = document.querySelector("#text_h3"); elText3.setAttribute("visible", false);
+					var elText4 = document.querySelector("#text_h4"); elText4.setAttribute("visible", false);
+					var elText5 = document.querySelector("#text_h5"); elText5.setAttribute("visible", false);
+					var elText6 = document.querySelector("#text_h6"); elText6.setAttribute("visible", false);
+
+					text.forEach(function (elemento, indice, array) {
+					timeouts.push(setTimeout( () => {
+					     	//console.log(elemento + " " + indice);
+							el.setAttribute("visible",true);
+							el.setAttribute("text",format.format(elemento));
+							if(indice == 3){
+								elText0 = document.querySelector("#text_h0"); elText0.setAttribute("visible", true);
+								elText1 = document.querySelector("#text_h1"); elText1.setAttribute("visible", true);
+								elText2 = document.querySelector("#text_h2"); elText2.setAttribute("visible", true);
+								elText3 = document.querySelector("#text_h3"); elText3.setAttribute("visible", true);
+								elText4 = document.querySelector("#text_h4"); elText4.setAttribute("visible", true);
+								elText5 = document.querySelector("#text_h5"); elText5.setAttribute("visible", true);
+								elText6 = document.querySelector("#text_h6"); elText6.setAttribute("visible", true);
+							}
+							if(indice == 4){
+								elText0 = document.querySelector("#text_h0"); elText0.setAttribute("visible", false);
+								elText1 = document.querySelector("#text_h1"); elText1.setAttribute("visible", false);
+								elText2 = document.querySelector("#text_h2"); elText2.setAttribute("visible", false);
+								elText3 = document.querySelector("#text_h3"); elText3.setAttribute("visible", false);
+								elText4 = document.querySelector("#text_h4"); elText4.setAttribute("visible", false);
+								elText5 = document.querySelector("#text_h5"); elText5.setAttribute("visible", false);
+								elText6 = document.querySelector("#text_h6"); elText6.setAttribute("visible", false);
+							}
+							if(indice == 9){
+								el.setAttribute("visible",false);
+							}
+					    }, timeConst * (timeFactor++)));
+					});
 					
 				});
+				
 				marker.addEventListener('markerLost', function() {
 					var markerId = marker.id;
 					console.log('markerLost', markerId);
+					console.log("timeouts: " + timeouts.length);
+					for (var i=0; i<timeouts.length; i++) {
+						 clearTimeout(timeouts[i]);
+					}	
+
 				});
 			}
 		});
